@@ -1,12 +1,20 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
+const PostSchema = require('./post');
 
 const UserSchema = new Schema({
-  username: String,
+  username: {
+    type: String,
+    validate: {
+      validator: (username) => username.length > 2,
+      message: 'Name must be longer than two characters.'
+    },
+    required: [true, 'Username must be filled in.']
+  },
   password: String,
-  Description: String,
-  Date_of_birth: Date
-  // posts: [Post]
+  description: String,
+  date_of_birth: Date,
+  posts: [PostSchema]
 });
 
 const User = mongoose.model('user', UserSchema);
