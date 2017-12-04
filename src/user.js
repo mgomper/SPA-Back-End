@@ -14,8 +14,16 @@ const UserSchema = new Schema({
   password: String,
   description: String,
   date_of_birth: Date,
-  posts: [PostSchema]
+  blogPosts: [{
+    type: Schema.Types.ObjectId,
+    ref: 'blogPost'
+  }]
+  // posts: [PostSchema]
 });
+
+// UserSchema.virtual('postCount').get(function(){
+//   return this.posts.length;
+// });
 
 const User = mongoose.model('user', UserSchema);
 
