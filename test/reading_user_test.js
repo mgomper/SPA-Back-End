@@ -2,8 +2,7 @@ const assert = require('assert');
 const User = require('../src/user');
 
 describe('Reading user records', () => {
-  let joe;
-  let dave;
+  let joe, joe2, alex, patrick;
 
 beforeEach((done) => {
   joe = new User({
@@ -20,10 +19,22 @@ beforeEach((done) => {
     date_of_birth: new Date(1997, 09, 07)
   });
 
-  joe.save();
-  joe2.save()
-  .then(() => done());
+  kim = new User({
+    username: 'Kim',
+    password: 'password',
+    description: 'Old pal Joe.',
+    date_of_birth: new Date(1997, 09, 07)
+  });
 
+  laurens = new User({
+    username: 'Laurens',
+    password: 'password',
+    description: 'Old pal Joe.',
+    date_of_birth: new Date(1997, 09, 07)
+  });
+
+  Promise.all([joe.save(), joe2.save(), kim.save(), laurens.save()])
+    .then(() => done());
 });
 
   it('Reads all users', (done) => {
@@ -40,5 +51,16 @@ beforeEach((done) => {
         assert(user.username === 'Joe');
         done();
       });
+  });
+
+  it('Can skip and limit results (pagination)', (done) => {
+    User.find({}).sort({ username: 1 }).skip(1).limit(2)
+    .then((users) => {
+      assert(users.length === 2);
+      assert(users[0].username === 'Joe');
+      assert(users[1].username === 'Kim');
+      done();
+
+    })
   });
 });

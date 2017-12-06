@@ -13,11 +13,13 @@ mongoose.connection
   });
 
 beforeEach((done) => {
-  const { users, comments, blogposts } = mongoose.connection.collections;
+  const { users, comments, blogposts, boards } = mongoose.connection.collections;
   users.drop(() => {
     comments.drop(() => {
       blogposts.drop(() => {
-        done();
+        boards.drop(() => {
+          done();
+        });
       });
     });
   });

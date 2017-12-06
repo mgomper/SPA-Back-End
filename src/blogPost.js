@@ -21,6 +21,8 @@ const BlogPostSchema = new Schema({
   },
   // user: User,
   rating: Number,
+  user: { type: Schema.Types.ObjectId, ref: 'user' },
+  board: {type: Schema.Types.ObjectId, ref: 'board'},
   comments: [{
     type: Schema.Types.ObjectId,
     ref: 'comment'
