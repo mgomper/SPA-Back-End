@@ -11,6 +11,16 @@ routes.get('/users', function(req, res){
     .catch((error) => res.status(400).json(error));
 });
 
+routes.get('/users/:id', function(req, res) {
+    res.contentType('application/json');
+    const userId = req.param('id');
+    User.find({_id: id})
+        .then((user) => {
+        res.status(200).json(user);
+})
+    .catch((error) => res.status(400).json(error));
+});
+
 routes.post('/users', function(req, res) {
     const userProps = req.body;
 
@@ -18,6 +28,30 @@ routes.post('/users', function(req, res) {
         .then((user) => {
         res.status(200).send(user)
 })
+    .catch((error) => res.status(400).json(error))
+});
+
+routes.put('/users/:id', function(req, res) {
+    res.contentType('application/json');
+    const userId = req.params.id;
+    const userProps = req.body;
+
+    User.findByIdAndUpdate({_id: userId}, userProps)
+        .then(()=> User.findById({_id: userId}))
+        .then((user) => {
+        res.status(200).send(user)
+})
+    .catch((error) => res.status(400).json(error))
+
+});
+
+routes.delete('/users/:id', function(req, res) {
+    const userId = req.param('id');
+    User.findByIdAndRemove(userId)
+        .then((user) => res.status(200).json({
+        'status': 'User is deleted.',
+        'user': user
+    }))
     .catch((error) => res.status(400).json(error))
 });
 

@@ -2,8 +2,11 @@ var http = require('http');
 var express = require('express');
 var bodyParser = require('body-parser');
 var logger = require('morgan');
-var mongodb = require('./src/config/mongo.db'); //!!!!!!!!!!!!!
+var mongodb = require('./src/config/mongo.db');
 var userRoutes = require('./src/api/user.routes');
+var boardRoutes = require('./src/api/board.routes');
+var commentRoutes = require('./src/api/comment.routes');
+var blogPostRoutes = require('./src/api/blogPost.routes');
 var config = require('./src/config/env/env');
 
 var app = express();
@@ -34,6 +37,9 @@ app.use(function (req, res, next) {
 });
 
 app.use('/api', userRoutes);
+app.use('/api', commentRoutes);
+app.use('/api', blogPostRoutes);
+app.use('/api', boardRoutes);
 
 
 app.use(function (err, req, res, next) {
