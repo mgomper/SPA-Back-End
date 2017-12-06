@@ -1,5 +1,8 @@
 const mongoose = require('mongoose');
 
+mongoose.Promise = global.Promise;
+
+before(()=>{
 mongoose.connect('mongodb://localhost/app_test');
 // app_test wordt automatisch aangemaakt bij aanroep
 mongoose.connection
@@ -7,3 +10,15 @@ mongoose.connection
   .on('error', (error) => {
     console.warn('Warning', error);
   });
+  });
+
+beforeEach((done) => {
+  const { users, comments, blogposts } = mongoose.connection.collections;
+  users.drop(() => {
+    comments.drop(() => {
+      blogposts.drop(() => {
+        done();
+      });
+    });
+  });
+});
