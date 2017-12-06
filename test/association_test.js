@@ -1,8 +1,8 @@
 const assert = require('assert');
-const User = require('../src/user');
-const Comment = require('../src/comment');
-const BlogPost = require('../src/blogPost');
-const Board = require('../src/board');
+const User = require('../src/model/user');
+const Comment = require('../src/model/comment');
+const BlogPost = require('../src/model/blogPost');
+const Board = require('../src/model/board');
 const mongoose = require('mongoose');
 
 describe('association between comment, user and blogPost', () => {

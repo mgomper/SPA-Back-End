@@ -1,5 +1,6 @@
 const assert = require('assert');
-const User = require('../src/user');
+const User = require('../src/model/user');
+
 
 
 describe('Validation on user records', () => {

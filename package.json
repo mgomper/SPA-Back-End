@@ -2,9 +2,10 @@
   "name": "spa-back-end",
   "version": "1.0.0",
   "description": "Back end of application (MongoDb NodeJS)",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
-    "test": "nodemon --exec mocha -R min"
+    "test": "nodemon --exec mocha -R min",
+    "start": "nodemon server.js"
   },
   "repository": {
     "type": "git",
@@ -17,8 +18,10 @@
   },
   "homepage": "https://github.com/mgomper/SPA-Back-End#readme",
   "dependencies": {
+    "express": "^4.16.2",
     "mocha": "^4.0.1",
     "mongoose": "^4.13.6",
+    "morgan": "^1.9.0",
     "nodemon": "^1.12.1"
   }
 }
