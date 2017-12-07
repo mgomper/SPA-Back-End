@@ -2,15 +2,6 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const BlogPostSchema = new Schema({
-  // title: {
-  //   type: String,
-  //   validate: {
-  //     validator: (title) => title.length > 2,
-  //     message: 'Title must contain at least 3 characters.'
-  //   },
-  //   required: [true, 'Title must be filled in.']
-  // },
-
   content: {
     type: String,
     validate: {
@@ -19,7 +10,6 @@ const BlogPostSchema = new Schema({
     },
     required: [true, 'Content must be filled in.']
   },
-  // user: User,
   rating: Number,
   user: { type: Schema.Types.ObjectId, ref: 'user' },
   board: {type: Schema.Types.ObjectId, ref: 'board'},
@@ -27,12 +17,7 @@ const BlogPostSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: 'comment'
   }]
-  // board: Board
 });
-
-// UserSchema.virtual('postCount').get(function(){
-//   return this.posts.length;
-// });
 
 const BlogPost = mongoose.model('blogPost', BlogPostSchema);
 
