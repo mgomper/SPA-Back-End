@@ -14,12 +14,13 @@ const UserSchema = new Schema({
   password: String,
   description: String,
   date_of_birth: Date,
+  user_score: Number,
   blogPosts: [{
     type: Schema.Types.ObjectId,
     ref: 'blogPost'
   }]
-  // posts: [PostSchema]
-});
+},
+{timestamps: true});
 
 // UserSchema.virtual('postCount').get(function(){
 //   return this.posts.length;

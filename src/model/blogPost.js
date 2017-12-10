@@ -1,7 +1,17 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
+const commentSchema = require('../model/comment');
 
 const BlogPostSchema = new Schema({
+  // title: String;
+  // title: {
+  //   type: String,
+  //   validate: {
+  //     validator: (title) => title.length > 2,
+  //     message: 'Title must contain at least 3 characters.'
+  //   },
+  //   required: [true, 'Title must be filled in.']
+  // },
   content: {
     type: String,
     validate: {
@@ -11,13 +21,12 @@ const BlogPostSchema = new Schema({
     required: [true, 'Content must be filled in.']
   },
   rating: Number,
+  title: String,
   user: { type: Schema.Types.ObjectId, ref: 'user' },
   board: {type: Schema.Types.ObjectId, ref: 'board'},
-  comments: [{
-    type: Schema.Types.ObjectId,
-    ref: 'comment'
-  }]
-});
+  comments: [commentSchema]
+},
+{timestamps: true});
 
 const BlogPost = mongoose.model('blogPost', BlogPostSchema);
 

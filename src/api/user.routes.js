@@ -13,8 +13,8 @@ routes.get('/users', function(req, res){
 
 routes.get('/users/:id', function(req, res) {
     res.contentType('application/json');
-    const userId = req.param('id');
-    User.find({_id: id})
+    const userId = req.params.id;
+    User.findById({_id: userId})
         .then((user) => {
         res.status(200).json(user);
 })

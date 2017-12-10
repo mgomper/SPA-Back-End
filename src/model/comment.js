@@ -12,14 +12,14 @@ const CommentSchema = new Schema({
   },
   user: { type: Schema.Types.ObjectId, ref: 'user' },
   rating: Number
-
   // board: Board
-});
+},
+{timestamps: true});
 
 // UserSchema.virtual('postCount').get(function(){
 //   return this.posts.length;
 // });
 
-const Comment = mongoose.model('comment', CommentSchema);
+// const Comment = mongoose.model('comment', CommentSchema);
 
-module.exports = Comment;
+module.exports = CommentSchema;

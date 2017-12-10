@@ -45,6 +45,96 @@ routes.put('/blogPosts/:id', function(req, res) {
 
 });
 
+// routes.put('/blogPosts/:id/comment', function (req, res) {
+//   res.contentType('application/json');
+//   const blogPostId = req.params.id;
+//   const blogPostProps = req.body;
+//
+//     BlogPost.findOneAndUpdate({
+//         _id: blogPostId
+//     }, {$push: {comments: blogPostProps}}).then(function (comment) {
+//         res.status(200). json(comment);
+//     }).catch((error) => {
+//         res.status(400).json(error);
+//     })
+// });
+
+// routes.put('/blogPosts/:id/comment', function (req, res){
+//   res.contentType('application/json');
+//   const blogPostId = req.params.id;
+//   const blogPostProps = req.body;
+//
+//   User.findById(blogPostId)
+//     .then((blogPost) => {
+//       blogPost.comments.push(blogPostProps);
+//       return blogPost.save()
+//     .then(() => {
+//       res.status(200).send(blogPost)
+//     })
+//     .catch((error) => res.status(400).json(error))
+//     });
+// });
+
+routes.put('/blogPosts/:id/comment', function(req, res) {
+    const blogPostId = req.param('id');
+    const commentProps = req.body;
+
+    BlogPost.findById(req.params.id)
+        .then((blogPost) => {
+          blogPost.comments.push(commentProps);
+          blogPost.save();
+        })
+        .then(() => res.status(200).json({
+        'status': 'Comment is added.'
+    }))
+    .catch((error) => res.status(400).json(error))
+});
+
+routes.put('/blogPosts/:id/comment/:idm', function(req, res) {
+    const blogPostId = req.params.id;
+    const commentId = req.params.idm;
+
+    BlogPost.findById(blogPostId)
+        .then((blogPost) => {
+          blogPost.comments.id(commentId).rating ;
+          blogPost.save();
+        })
+        .then((blogPost) => res.status(200).json({
+        'status': 'Comment rating is increased.'
+    }))
+    .catch((error) => res.status(400).json(error))
+});
+
+// routes.put('/blogPosts/:id/comment/:idm', function(req, res) {
+//     const blogPostId = req.param('id');
+//     const commentId = req.param('idm');
+//
+//     BlogPost.findById(blogPostId)
+//         .then((blogPost) => {
+//           blogPost.comments.id(commentId).update({ _id: commentId}, {$inc: {rating: 1}});
+//           blogPost.save();
+//         })
+//         .then((blogPost) => res.status(200).json({
+//         'status': 'Comment is deleted.'
+//     }))
+//     .catch((error) => res.status(400).json(error))
+// });
+
+routes.delete('/blogPosts/:id/comment/:idm', function(req, res) {
+    const blogPostId = req.param('id');
+    const commentId = req.param('idm');
+
+    BlogPost.findById(blogPostId)
+        .then((blogPost) => {
+          blogPost.comments.id(commentId).remove();
+          blogPost.save();
+        })
+        .then((blogPost) => res.status(200).json({
+        'status': 'Comment is deleted.'
+    }))
+    .catch((error) => res.status(400).json(error))
+});
+
 routes.delete('/blogPosts/:id', function(req, res) {
     const blogPostId = req.param('id');
     BlogPost.findByIdAndRemove(blogPostId)
