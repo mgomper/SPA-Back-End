@@ -90,17 +90,44 @@ routes.put('/blogPosts/:id/comment', function(req, res) {
     .catch((error) => res.status(400).json(error))
 });
 
-routes.put('/blogPosts/:id/comment/:idm', function(req, res) {
+routes.put('/blogPosts/:id/commentinc/:idm', function(req, res) {
     const blogPostId = req.params.id;
     const commentId = req.params.idm;
 
-    BlogPost.findById(blogPostId)
-        .then((blogPost) => {
-          blogPost.comments.id(commentId).rating ;
-          blogPost.save();
-        })
+        BlogPost.update({_id: blogPostId, 'comments._id': commentId}, {$inc:{'comments.$.rating':1}})
         .then((blogPost) => res.status(200).json({
         'status': 'Comment rating is increased.'
+    }))
+    .catch((error) => res.status(400).json(error))
+});
+
+routes.put('/blogPosts/:id/commentdec/:idm', function(req, res) {
+    const blogPostId = req.params.id;
+    const commentId = req.params.idm;
+
+        BlogPost.update({_id: blogPostId, 'comments._id': commentId}, {$inc:{'comments.$.rating':-1}})
+        .then((blogPost) => res.status(200).json({
+        'status': 'Comment rating is decreased.'
+    }))
+    .catch((error) => res.status(400).json(error))
+});
+
+routes.put('/blogPosts/:id/incr', function(req, res) {
+    const blogPostId = req.params.id;
+
+        BlogPost.update({_id: blogPostId}, {$inc:{rating:1}})
+        .then((blogPost) => res.status(200).json({
+        'status': 'Post rating is increased.'
+    }))
+    .catch((error) => res.status(400).json(error))
+});
+
+routes.put('/blogPosts/:id/decr', function(req, res) {
+    const blogPostId = req.params.id;
+
+        BlogPost.update({_id: blogPostId}, {$inc:{rating:-1}})
+        .then((blogPost) => res.status(200).json({
+        'status': 'Post rating is decreased.'
     }))
     .catch((error) => res.status(400).json(error))
 });
