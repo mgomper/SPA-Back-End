@@ -45,36 +45,6 @@ routes.put('/blogPosts/:id', function(req, res) {
 
 });
 
-// routes.put('/blogPosts/:id/comment', function (req, res) {
-//   res.contentType('application/json');
-//   const blogPostId = req.params.id;
-//   const blogPostProps = req.body;
-//
-//     BlogPost.findOneAndUpdate({
-//         _id: blogPostId
-//     }, {$push: {comments: blogPostProps}}).then(function (comment) {
-//         res.status(200). json(comment);
-//     }).catch((error) => {
-//         res.status(400).json(error);
-//     })
-// });
-
-// routes.put('/blogPosts/:id/comment', function (req, res){
-//   res.contentType('application/json');
-//   const blogPostId = req.params.id;
-//   const blogPostProps = req.body;
-//
-//   User.findById(blogPostId)
-//     .then((blogPost) => {
-//       blogPost.comments.push(blogPostProps);
-//       return blogPost.save()
-//     .then(() => {
-//       res.status(200).send(blogPost)
-//     })
-//     .catch((error) => res.status(400).json(error))
-//     });
-// });
-
 routes.put('/blogPosts/:id/comment', function(req, res) {
     const blogPostId = req.param('id');
     const commentProps = req.body;
@@ -130,6 +100,18 @@ routes.put('/blogPosts/:id/decr', function(req, res) {
         'status': 'Post rating is decreased.'
     }))
     .catch((error) => res.status(400).json(error))
+});
+
+routes.get('/blogPosts/filter/rating', function(req, res) {
+      res.contentType('application/json');
+      BlogPost.find({})
+        .sort({rating: -1})
+        .then((blogPost) => {
+          res.status(200).json(blogPost);
+  })
+      .catch((error) => res.status(400).json(error));
+
+
 });
 
 // routes.put('/blogPosts/:id/comment/:idm', function(req, res) {
