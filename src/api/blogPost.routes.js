@@ -1,6 +1,36 @@
 var express = require('express');
 var routes = express.Router();
 var BlogPost = require('../model/blogPost');
+var neo4j = require('neo4j-driver').v1;
+var BlogPost = require('../model/blogPost');
+
+const driver = neo4j.driver("bolt://localhost", neo4j.auth.basic("neo4j", "neo4j"));
+const session = driver.session();
+
+routes.get('/blogposts/frontpage', function(req, res) {
+  //res.contentType('application/json');
+  var ids = [];
+  var advertisementsFromFavs = [];
+
+  session
+    .run("MATCH (n:BlogPost) RETURN n")
+    .then(function(result) {
+      result.records.forEach(function(record){
+        ids.push(record._fields[0].properties.mongoId);
+      });
+      console.log(ids);
+      return ids;
+    })
+    .then((ids)=>{
+      BlogPost.find({_id: { $in: ids}})
+          .then((blogPost) => {
+          res.status(200).json(blogPost);
+  })
+    })
+    .catch((error) => {
+      res.status(400).json(error);
+    })
+});
 
 routes.get('/blogPosts', function(req, res){
   res.contentType('application/json');
@@ -30,6 +60,8 @@ routes.post('/blogPosts', function(req, res) {
 })
     .catch((error) => res.status(400).json(error))
 });
+
+
 
 routes.put('/blogPosts/:id', function(req, res) {
     res.contentType('application/json');
@@ -114,21 +146,6 @@ routes.get('/blogPosts/filter/rating', function(req, res) {
 
 });
 
-// routes.put('/blogPosts/:id/comment/:idm', function(req, res) {
-//     const blogPostId = req.param('id');
-//     const commentId = req.param('idm');
-//
-//     BlogPost.findById(blogPostId)
-//         .then((blogPost) => {
-//           blogPost.comments.id(commentId).update({ _id: commentId}, {$inc: {rating: 1}});
-//           blogPost.save();
-//         })
-//         .then((blogPost) => res.status(200).json({
-//         'status': 'Comment is deleted.'
-//     }))
-//     .catch((error) => res.status(400).json(error))
-// });
-
 routes.delete('/blogPosts/:id/comment/:idm', function(req, res) {
     const blogPostId = req.param('id');
     const commentId = req.param('idm');
@@ -153,5 +170,21 @@ routes.delete('/blogPosts/:id', function(req, res) {
     }))
     .catch((error) => res.status(400).json(error))
 });
+
+routes.post('/blogPosts/frontpage/:id', function (req, res) {
+  var id = req.params.id;
+
+  session
+    .run("CREATE(n:BlogPost {mongoId:{idNeo}}) RETURN n.mongoId", {idNeo: id})
+    .then(function(result) {
+      res.status(200).json({"response": "BlogPost added to front page."});
+      session.close();
+    })
+    .catch((error) => {
+      res.status(400).json(error);
+    });
+});
+
+
 
 module.exports = routes;
