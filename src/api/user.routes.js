@@ -5,6 +5,7 @@ var User = require('../model/user');
 routes.get('/users', function(req, res){
   res.contentType('application/json');
   User.find({})
+  .sort({createdAt: -1})
     .then((users) => {
       res.status(200).json(users);
     })
