@@ -49,7 +49,6 @@ app.use(function (req, res, next) {
 });
 
 app.use('/api', userRoutes);
-app.use('/api', commentRoutes);
 app.use('/api', blogPostRoutes);
 app.use('/api', boardRoutes);
 app.use('/api', favoritesRoutes);

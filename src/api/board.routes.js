@@ -1,3 +1,5 @@
+//Boards nog niet toegepast in app
+
 var express = require('express');
 var routes = express.Router();
 var Board = require('../model/board');

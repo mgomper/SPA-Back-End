@@ -1,3 +1,5 @@
+//outdated maar staat hier voor de tests
+
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 

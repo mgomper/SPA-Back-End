@@ -10,17 +10,17 @@ describe('association between comment, user and blogPost', () => {
   beforeEach((done) => {
     joe = new User({username: 'Joe', password: 'password' });
     blogPost = new BlogPost({content: 'Content of post', rating: 4});
-    comment = new Comment({content: 'A comment on this great post.', rating: 4});
+    // comment = new Comment({content: 'A comment on this great post.', rating: 4});
     board = new Board({title: 'Art'});
 
     joe.blogPosts.push(blogPost);
-    blogPost.comments.push(comment);
+    // blogPost.comments.push(comment);
     board.blogPosts.push(blogPost);
     blogPost.user = joe;
-    comment.user = joe;
+    // comment.user = joe;
 
 //ipv .save 3x hieronder. Bij welke van de drie zet je .then done?
-    Promise.all([joe.save(), blogPost.save(), comment.save(), board.save()])
+    Promise.all([joe.save(), blogPost.save(), board.save()])
       .then(() => done());
   });
 
@@ -37,20 +37,20 @@ describe('association between comment, user and blogPost', () => {
     User.findOne({username: 'Joe'})
       .populate({
         path: 'blogPosts',
-        populate: {
-          path: 'comments',
-          model: 'comment',
-          populate: {
-            path: 'user',
-            model: 'user'
-          }
-        }
+        // populate: {
+        //   path: 'comments',
+        //   model: 'comment',
+        //   populate: {
+        //     path: 'user',
+        //     model: 'user'
+        //   }
+        // }
       })
       .then((user) => {
 
         assert(user.blogPosts[0].content === 'Content of post');
-        assert(user.blogPosts[0].comments[0].content === 'A comment on this great post.');
-        assert(user.blogPosts[0].comments[0].user.username === 'Joe');
+        // assert(user.blogPosts[0].comments[0].content === 'A comment on this great post.');
+        // assert(user.blogPosts[0].comments[0].user.username === 'Joe');
         done();
       });
   });
@@ -70,21 +70,13 @@ describe('association between comment, user and blogPost', () => {
     Board.findOne({title: 'Art'})
       .populate({
         path: 'blogPosts',
-        populate: {
-          path: 'comments',
-          model: 'comment',
-          populate: {
-            path: 'user',
-            model: 'user'
-          }
-        }
       })
       .then((board) => {
         console.log(board.blogPosts);
         assert(board.title === 'Art');
         assert(board.blogPosts[0].content === 'Content of post');
-        assert(board.blogPosts[0].comments[0].content === 'A comment on this great post.');
-        assert(board.blogPosts[0].comments[0].user.username === 'Joe');
+        // assert(board.blogPosts[0].comments[0].content === 'A comment on this great post.');
+        // assert(board.blogPosts[0].comments[0].user.username === 'Joe');
         done();
       });
   });

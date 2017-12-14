@@ -5,6 +5,7 @@ var neo4j = require('neo4j-driver').v1;
 var BlogPost = require('../model/blogPost');
 
 const driver = neo4j.driver("bolt://hobby-blepbjifjhecgbkeenplgjal.dbs.graphenedb.com:24786", neo4j.auth.basic("neo4j-favorite", "b.4XH9o3Lqpsdw.DY99bLVYkcFRZm8u"));
+// const driver = neo4j.driver("bolt://localhost", neo4j.auth.basic("neo4j", "neo4j"));
 const session = driver.session();
 
 routes.get('/blogposts/frontpage', function(req, res) {
@@ -171,11 +172,12 @@ routes.delete('/blogPosts/:id', function(req, res) {
     .catch((error) => res.status(400).json(error))
 });
 
-routes.post('/blogPosts/frontpage/:id', function (req, res) {
-  var id = req.params.id;
+routes.post('/blogPosts/frontpage/:id/:aid', function (req, res) {
+  const id = req.param('id');
+  const aid = req.param('aid');
 
-  session
-    .run("CREATE(n:BlogPost {mongoId:{idNeo}}) RETURN n.mongoId", {idNeo: id})
+    session
+    .run("MERGE (n:BlogPost {mongoId:{idNeo}}) MERGE (b:Admin {mongoAdminId:{idNeoAd}}) MERGE(n)-[:ADDED_BY]->(b)", {idNeo: id, idNeoAd: aid})
     .then(function(result) {
       res.status(200).json({"response": "BlogPost added to front page."});
       session.close();
