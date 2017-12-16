@@ -3,15 +3,6 @@ const Schema = mongoose.Schema;
 const commentSchema = require('../model/comment');
 
 const BlogPostSchema = new Schema({
-  // title: String;
-  // title: {
-  //   type: String,
-  //   validate: {
-  //     validator: (title) => title.length > 2,
-  //     message: 'Title must contain at least 3 characters.'
-  //   },
-  //   required: [true, 'Title must be filled in.']
-  // },
   content: {
     type: String,
     validate: {

@@ -1,6 +1,6 @@
 // const assert = require('assert');
-// const User = require('../src/user');
-// const PostSchema = require('../src/post');
+// const User = require('../src/model/user');
+// const PostSchema = require('../src/model/post');
 //
 // describe('Subdocumenting posts within users', () => {
 //   it('can create a user with a subdocument', (done) => {

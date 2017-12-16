@@ -2,25 +2,25 @@ const assert = require('assert');
 const User = require('../src/model/user');
 const Comment = require('../src/model/comment');
 const BlogPost = require('../src/model/blogPost');
-const Board = require('../src/model/board');
+// const Board = require('../src/model/board');
 const mongoose = require('mongoose');
 
 describe('association between comment, user and blogPost', () => {
-  let joe, blogPost, comment, board;
+  let joe, blogPost, comment;
   beforeEach((done) => {
     joe = new User({username: 'Joe', password: 'password' });
     blogPost = new BlogPost({content: 'Content of post', rating: 4});
     // comment = new Comment({content: 'A comment on this great post.', rating: 4});
-    board = new Board({title: 'Art'});
+    // board = new Board({title: 'Art'});
 
     joe.blogPosts.push(blogPost);
     // blogPost.comments.push(comment);
-    board.blogPosts.push(blogPost);
+    // board.blogPosts.push(blogPost);
     blogPost.user = joe;
     // comment.user = joe;
 
 //ipv .save 3x hieronder. Bij welke van de drie zet je .then done?
-    Promise.all([joe.save(), blogPost.save(), board.save()])
+    Promise.all([joe.save(), blogPost.save()])
       .then(() => done());
   });
 
@@ -66,18 +66,18 @@ describe('association between comment, user and blogPost', () => {
       });
   });
 
-  it('saves a board with a blogPost', (done) => {
-    Board.findOne({title: 'Art'})
-      .populate({
-        path: 'blogPosts',
-      })
-      .then((board) => {
-        console.log(board.blogPosts);
-        assert(board.title === 'Art');
-        assert(board.blogPosts[0].content === 'Content of post');
-        // assert(board.blogPosts[0].comments[0].content === 'A comment on this great post.');
-        // assert(board.blogPosts[0].comments[0].user.username === 'Joe');
-        done();
-      });
-  });
+  // it('saves a board with a blogPost', (done) => {
+  //   Board.findOne({title: 'Art'})
+  //     .populate({
+  //       path: 'blogPosts',
+  //     })
+  //     .then((board) => {
+  //       console.log(board.blogPosts);
+  //       assert(board.title === 'Art');
+  //       assert(board.blogPosts[0].content === 'Content of post');
+  //       // assert(board.blogPosts[0].comments[0].content === 'A comment on this great post.');
+  //       // assert(board.blogPosts[0].comments[0].user.username === 'Joe');
+  //       done();
+  //     });
+  // });
 });
