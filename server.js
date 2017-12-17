@@ -6,7 +6,6 @@ var bodyParser = require('body-parser');
 var cookieParser = require('cookie-parser');
 var mongodb = require('./src/config/mongo.db');
 var userRoutes = require('./src/api/user.routes');
-var boardRoutes = require('./src/api/board.routes');
 var commentRoutes = require('./src/api/comment.routes');
 var blogPostRoutes = require('./src/api/blogPost.routes');
 var favoritesRoutes = require('./src/api/favorites.routes');
@@ -50,7 +49,6 @@ app.use(function (req, res, next) {
 
 app.use('/api', userRoutes);
 app.use('/api', blogPostRoutes);
-app.use('/api', boardRoutes);
 app.use('/api', favoritesRoutes);
 
 app.use(function (err, req, res, next) {

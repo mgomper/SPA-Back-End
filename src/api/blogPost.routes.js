@@ -2,10 +2,10 @@ var express = require('express');
 var routes = express.Router();
 var BlogPost = require('../model/blogPost');
 var neo4j = require('neo4j-driver').v1;
-var BlogPost = require('../model/blogPost');
+var User = require('../model/user');
 
-const driver = neo4j.driver("bolt://hobby-blepbjifjhecgbkeenplgjal.dbs.graphenedb.com:24786", neo4j.auth.basic("neo4j-favorite", "b.4XH9o3Lqpsdw.DY99bLVYkcFRZm8u"));
-// const driver = neo4j.driver("bolt://localhost", neo4j.auth.basic("neo4j", "neo4j"));
+// const driver = neo4j.driver("bolt://hobby-blepbjifjhecgbkeenplgjal.dbs.graphenedb.com:24786", neo4j.auth.basic("neo4j-favorite", "b.4XH9o3Lqpsdw.DY99bLVYkcFRZm8u"));
+const driver = neo4j.driver("bolt://localhost", neo4j.auth.basic("neo4j", "neo4j"));
 const session = driver.session();
 
 routes.get('/blogposts/frontpage', function(req, res) {
@@ -175,12 +175,30 @@ routes.delete('/blogPosts/:id', function(req, res) {
 routes.post('/blogPosts/frontpage/:id/:aid', function (req, res) {
   const id = req.param('id');
   const aid = req.param('aid');
+  var role;
 
+      User.findById({_id: aid})
+          .then((user) => {
+        role = user.role;
+
+
+if(role === 'Admin'){
     session
-    .run("MERGE (n:BlogPost {mongoId:{idNeo}}) MERGE (b:Admin {mongoAdminId:{idNeoAd}}) MERGE(n)-[:ADDED_BY]->(b)", {idNeo: id, idNeoAd: aid})
+    .run("MERGE (n:BlogPost {mongoId:{idNeo}}) MERGE (b:Admin {mongoAdminId:{idNeoAd}}) MERGE (n)-[:ADDED_BY]->(b) WITH b WHERE NOT (b)-[:COLLUEGE_OF]-() MATCH (c:Admin) WHERE c <> b MERGE (b)-[:COLLUEGE_OF]-(c)", {idNeo: id, idNeoAd: aid})
     .then(function(result) {
-      res.status(200).json({"response": "BlogPost added to front page."});
+      res.status(200).json({"response": "BlogPost added to front page by admin."});
       session.close();
+    })
+console.log('admin access');
+  } else {
+    session
+    .run("MERGE (n:BlogPost {mongoId:{idNeo}}) MERGE (b:User {mongoUserId:{idNeoUs}}) MERGE (n)-[:ADDED_BY]->(b)", {idNeo: id, idNeoUs: aid})
+    .then(function(result) {
+      res.status(200).json({"response": "BlogPost added to front page by user."});
+      session.close();
+    })
+console.log('user access');
+  }
     })
     .catch((error) => {
       res.status(400).json(error);

@@ -15,6 +15,7 @@ const UserSchema = new Schema({
   description: String,
   date_of_birth: Date,
   user_score: Number,
+  role: String,
   blogPosts: [{
     type: Schema.Types.ObjectId,
     ref: 'blogPost'
