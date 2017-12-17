@@ -4,8 +4,8 @@ var BlogPost = require('../model/blogPost');
 var neo4j = require('neo4j-driver').v1;
 var User = require('../model/user');
 
-// const driver = neo4j.driver("bolt://hobby-blepbjifjhecgbkeenplgjal.dbs.graphenedb.com:24786", neo4j.auth.basic("neo4j-favorite", "b.4XH9o3Lqpsdw.DY99bLVYkcFRZm8u"));
-const driver = neo4j.driver("bolt://localhost", neo4j.auth.basic("neo4j", "neo4j"));
+const driver = neo4j.driver("bolt://hobby-blepbjifjhecgbkeenplgjal.dbs.graphenedb.com:24786", neo4j.auth.basic("neo4j-favorite", "b.4XH9o3Lqpsdw.DY99bLVYkcFRZm8u"));
+// const driver = neo4j.driver("bolt://localhost", neo4j.auth.basic("neo4j", "neo4j"));
 const session = driver.session();
 
 routes.get('/blogposts/frontpage', function(req, res) {
